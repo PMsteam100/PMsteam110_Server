@@ -45,6 +45,8 @@ const register = async (req, res) => {
       <h2>Hello ${name},</h2>
       <p>Your registration was successful! 🎉</p>
       <p>Welcome to EduHive Platform, you can proceed to login as ${role}.</p>
+      <p>Regards</p>
+      <p>EduHive Team</p>
     `;
 
     await sendEmail(email, "Registration Successful", message);
