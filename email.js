@@ -12,7 +12,7 @@ const sendEmail = async (to, subject, htmlContent) => {
     });
 
     const mailOptions = {
-      from: `"YourApp Name" <${process.env.EMAIL_USER}>`,
+      from: `"EduHive" <${process.env.EMAIL_USER}>`,
       to,
       subject: "Welcome to EduHive! Registration Successful ✅",
       html: htmlContent
