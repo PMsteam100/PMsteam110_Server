@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 const Contact = require('./contact'); // adjust path to your Contact model
 
 const passport = require('passport'); // Add passport if not already imported
-
+const sendEmail = require("./email"); // Adjust path to your email module
 
 const register = async (req, res) => {
   const { name, email, password, confirmPassword, role } = req.body;
@@ -39,14 +39,17 @@ const register = async (req, res) => {
 
     await newUser.save();
 
-    res.status(201).json({
-      message: "Login successful",
-      user: {
-        id: User._id,
-        name: User.name,
-        role: User.role,
-      },
-    });
+
+    
+    const message = `
+      <h2>Hello ${name},</h2>
+      <p>Your registration was successful! 🎉</p>
+      <p>Welcome to EduHive Platform, you can proceed to login ${role}.</p>
+    `;
+
+    await sendEmail(email, "Registration Successful", message);
+
+ res.status(201).json({ message: "User registered and email sent" });
   } catch (err) {
     console.error("LOGIN ERROR:", err); // <--- Add this
     res.status(500).json({ message: 'Server error.' });
@@ -85,13 +88,15 @@ const login = async (req, res) => {
       sameSite: 'None',
     });
 
-    res.status(200).json({
-      message: "Login successful",
-      user: {
-        role: user.role,
-      },
-      accessToken,
-    });
+   res.status(200).json({
+  message: "Login successful",
+  user: {
+    name: user.name, // Include name here
+    role: user.role,
+  },
+  accessToken,
+});
+
 
   } catch (err) {
     console.error("LOGIN ERROR:", err);
